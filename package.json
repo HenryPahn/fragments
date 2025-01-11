@@ -11,5 +11,8 @@
     "url": "git+https://github.com/HenryPahn/fragments.git"
   },
   "author": "Hoang Phan",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "prettier": "3.4.2"
+  }
 }
