@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint \"./src/**/*.js\"", 
+    "lint": "eslint \"./src/**/*.js\"",
     "start": "node src/server.js",
     "dev": "LOG_LEVEL=debug nodemon ./src/server.js --watch src",
     "debug": "LOG_LEVEL=debug nodemon --inspect=0.0.0.0:9229 ./src/server.js --watch src"
@@ -26,6 +26,7 @@
   "dependencies": {
     "compression": "^1.7.5",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "helmet": "^8.0.0",
     "pino": "^9.6.0",
