@@ -18,7 +18,11 @@ const server = stoppable(
     // Log a message that the server has started, and which port it's using.
     logger.info(`Server started on port ${port}`);
 
-    if (process.env.LOG_LEVEL === 'debug') {
+    // Check if the current npm script is 'dev' or 'debug'
+    const isDebugging = process.env.npm_lifecycle_event === 'dev' || process.env.npm_lifecycle_event === 'debug';
+
+    // if user is debugging, print all environment variables to check if any is missing	  
+    if (isDebugging) {
       logger.info(`Environment Variables ${JSON.stringify(process.env, null, 2)}`);
     }
   })

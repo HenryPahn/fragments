@@ -65,8 +65,9 @@ npm run debug
 > [!NOTE]
 > Running server by **dev** and **debug** will display the received request as JSON which is prettier-response. 
 
+## Amazon Cognito Set Up
 
+1. Go to "Amazon Cognito", click "Create user pool" button.  
 
-
-
+2. Select "Single-page application (SPA)" by default. Name your application. Select **Username** for ***"Options for Sign-in identifiers"***. Select **Email** for ***"Required attributes for sign-up"***. Set http://localhost:1234 ***"Add a return URL"***. Then click ***Create*** button. 
 
