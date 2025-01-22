@@ -5,6 +5,9 @@ const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 
+// Functions return successful responses 
+const { createErrorResponse } = require('./response')
+
 const logger = require('./logger');
 const pino = require('pino-http')({
   // Use our default logger instance, which is already configured
@@ -38,13 +41,12 @@ app.use('/', require('./routes'));
 
 // Add 404 middleware to handle any requests for resources that can't be found
 app.use((req, res) => {
-  res.status(404).json({
-    status: 'error',
-    error: {
-      message: 'not found',
-      code: 404,
-    },
-  });
+  const status = 404;
+  const message = 'not found';
+
+  const errorMessage = createErrorResponse(status, message)
+
+  res.status(404).json(errorMessage);
 });
 
 // Add error-handling middleware to deal with anything else
@@ -55,18 +57,14 @@ app.use((err, req, res, next) => {
   const status = err.status || 500;
   const message = err.message || 'unable to process request';
 
+  const errorMessage = createErrorResponse(status, message)
+
   // If this is a server error, log something so we can see what's going on.
   if (status > 499) {
     logger.error({ err }, `Error processing request`);
   }
 
-  res.status(status).json({
-    status: 'error',
-    error: {
-      message,
-      code: status,
-    },
-  });
+  res.status(status).json(errorMessage);
 });
 
 // Export our `app` so we can access it in server.js
