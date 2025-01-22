@@ -3,3 +3,6 @@ node_modules/
 
 # Don't include .env, which might have sensitive information
 .env
+
+# jest 
+env.jest
