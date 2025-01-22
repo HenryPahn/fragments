@@ -4,8 +4,5 @@ node_modules/
 # Don't include .env, which might have sensitive information
 .env
 
-# Jest 
-env.jest
-
 # Coverage for test case 
 coverage/
