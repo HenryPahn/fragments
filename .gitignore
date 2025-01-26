@@ -6,3 +6,7 @@ node_modules/
 
 # Coverage for test case 
 coverage/
+
+# SSH private key for AWS
+.ssh/
+
