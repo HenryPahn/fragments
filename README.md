@@ -36,6 +36,24 @@ npm init -y
 npm run lint
 ```
 
+- Run test: 
+
+```sh
+npm test
+```
+
+- Run test and display only failed test cases: 
+
+```sh
+npm run test:watch
+```
+
+- Show the report of tests, and display the code lines are covered by tests: 
+
+```sh
+npm coverage
+```
+
 - Send GET request to PORT: 
 
 ```sh
@@ -58,6 +76,11 @@ curl -i localhost:[PORT]
 
 ```sh 
 npm start
+```
+
+- Start server to debug:
+
+```sh 
 npm run dev
 npm run debug
 ```
