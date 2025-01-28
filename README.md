@@ -113,7 +113,7 @@ npm run debug
 
 6. **Add second rule:** click **Add security group rule**. The second rule: type is **custom TCP**, protocol is **TCP**, port range is **8080** (This is the port that your fragments projcet is running on), and source type is **anywhere** (source will be **0.0.0.0/0** if you select this option). Description is optional. 
 
-> [!NOIE]
+> [!NOTE]
 > **0.0.0.0/0** means that any IP on the Internet can connect to the instance. You or anyone or even hackers can access
 > Select **My IP** for **Source type** will write your current IP to CIDR notation if your home network uses a Static IP vs a Dynamic IP. 
 
