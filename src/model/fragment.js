@@ -142,7 +142,21 @@ class Fragment {
    * @returns {Array<string>} list of supported mime types
    */
   get formats() {
-    return ['text/plain'];
+    const validFragmentConversions = {
+      "text/plain": ["text/plain"],
+      "text/markdown": ["text/markdown", "text/html", "text/plain"],
+      "text/html": ["text/html", "text/plain"],
+      "text/csv": ["text/csv", "text/plain", "application/json"],
+      "application/json": ["application/json", "application/x-yaml", "text/plain"],
+      "application/yaml": ["application/x-yaml", "text/plain"],
+      "image/png": ["image/png", "image/jpeg", "image/webp", "image/gif", "image/avif"],
+      "image/jpeg": ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"],
+      "image/webp": ["image/webp", "image/png", "image/jpeg", "image/gif", "image/avif"],
+      "image/avif": ["image/avif", "image/png", "image/jpeg", "image/webp", "image/gif"],
+      "image/gif": ["image/gif", "image/png", "image/jpeg", "image/webp", "image/avif"],
+    };
+
+    return validFragmentConversions[this.mimeType];
   }
 
   /**
@@ -151,7 +165,8 @@ class Fragment {
    * @returns {boolean} true if we support this Content-Type (i.e., type/subtype)
    */
   static isSupportedType(value) {
-    const supportedTypes = [`text/plain`, 'text/plain; charset=utf-8', `text/markdown`, `text/html`, `application/json`, `image/png`, `image/jpeg`, `image/webp`, `image/gif`];
+    // We will add more supported type later, such as  `text/markdown`, `text/html`, `application/json`, `image/png`, `image/jpeg`, `image/webp`, `image/gif`
+    const supportedTypes = [`text/plain`, 'text/plain; charset=utf-8'];
     return supportedTypes.includes(value)
   }
 }
