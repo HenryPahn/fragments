@@ -27,7 +27,8 @@ const server = stoppable(
 - LOG_LEVEL: ${process.env.LOG_LEVEL}
 - PORT: ${process.env.PORT}
 - AWS_COGNITO_POOL_ID: ${process.env.AWS_COGNITO_POOL_ID}
-- AWS_COGNITO_CLIENT_ID: ${process.env.AWS_COGNITO_CLIENT_ID}`);
+- AWS_COGNITO_CLIENT_ID: ${process.env.AWS_COGNITO_CLIENT_ID}
+- HTPASSWD_FILE: ${process.env.HTPASSWD_FILE}`);
     }
   })
 );
