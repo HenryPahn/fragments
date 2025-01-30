@@ -32,22 +32,27 @@ class Fragment {
       );
     }
 
+    // the type of size must be a number and size must not be negative
     if(typeof size !== 'number' || size < 0) {
       throw new Error(
         `size type must be number, and size can't be negative, got size=${size}`
       );
     }
 
+    // if the type is not supported, throw an exception
     if(!Fragment.isSupportedType(type)) {
       throw new Error(
         `type is not supported, got type=${type}`
       );
     }
 
+    // get the current time 
+    const currentDateTime = new Date().toISOString();
+
     this.ownerId = ownerId;
     this.id = id ? id : randomUUID(); 
-    this.created = created ? created : new Date().toISOString(); 
-    this.updated = updated ? updated : new Date().toISOString(); 
+    this.created = created ? created : currentDateTime; 
+    this.updated = updated ? updated : currentDateTime; 
     this.type = type; 
     this.size = size;
   }
@@ -59,6 +64,7 @@ class Fragment {
    * @returns Promise<Array<Fragment>>
    */
   static async byUser(ownerId, expand = false) {
+    // get all the fragments all the given-id owner
     const results =  await listFragments(ownerId, expand);
     return results ? results : [];
   }
@@ -70,7 +76,10 @@ class Fragment {
    * @returns Promise<Fragment>
    */
   static async byId(ownerId, id) {
+    // read the fragment from DB
     const result = await readFragment(ownerId, id); 
+
+    // create a new fragment from the result
     const newFragment = new Fragment(result);
     return newFragment;
   }
@@ -90,7 +99,11 @@ class Fragment {
    * @returns Promise<void>
    */
   save() {
-    this.updated = new Date().toISOString(); 
+    // get the current time 
+    const currentDateTime = new Date().toISOString();
+
+    // record the time of this update
+    this.updated = currentDateTime; 
     return writeFragment(this);
   }
 
@@ -103,7 +116,7 @@ class Fragment {
   }
 
   /**
-   * Set's the fragment's data in the database
+   * Set's the fragment's data in the database [Or, modify an existed fragment' data]
    * @param {Buffer} data
    * @returns Promise<void>
    */
@@ -114,8 +127,13 @@ class Fragment {
       );
     }
 
-    this.size += 1;
+    // get the number (integer) of butes of data
+    this.size = Buffer.byteLength(data);
+
+    // write the fragment data to the existed fragment
     await writeFragmentData(this.ownerId, this.id, data);
+
+    // save the fragment to the database
     this.save();
   }
 
@@ -142,6 +160,7 @@ class Fragment {
    * @returns {Array<string>} list of supported mime types
    */
   get formats() {
+    // list of convertable types 
     const validFragmentConversions = {
       "text/plain": ["text/plain"],
       "text/markdown": ["text/markdown", "text/html", "text/plain"],
@@ -165,8 +184,8 @@ class Fragment {
    * @returns {boolean} true if we support this Content-Type (i.e., type/subtype)
    */
   static isSupportedType(value) {
-    // We will add more supported type later, such as  `text/markdown`, `text/html`, `application/json`, `image/png`, `image/jpeg`, `image/webp`, `image/gif`
-    const supportedTypes = [`text/plain`, 'text/plain; charset=utf-8'];
+    // list of supported types 
+    const supportedTypes = [`text/plain`, 'text/plain; charset=utf-8', `text/markdown`, `text/html`, `application/json`, `image/png`, `image/jpeg`, `image/webp`, `image/gif`];
     return supportedTypes.includes(value)
   }
 }
