@@ -26,4 +26,6 @@ module.exports.strategy = () =>
     })
   );
 
-module.exports.authenticate = () => passport.authenticate('http', { session: false });
+const authorize = require('./auth-middleware');
+
+module.exports.authenticate = () => authorize('http');

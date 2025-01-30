@@ -60,4 +60,6 @@ module.exports.strategy = () =>
     }
   });
 
-module.exports.authenticate = () => passport.authenticate('bearer', { session: false });
+const authorize = require('./auth-middleware');
+
+module.exports.authenticate = () => authorize('bearer');
