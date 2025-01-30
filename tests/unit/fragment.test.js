@@ -20,10 +20,6 @@ const validTypes = [
 ];
 
 describe('Fragment class', () => {
-  afterEach(async () => {
-     
-  })
-
   test('common formats are supported', () => {
     validTypes.forEach((format) => expect(Fragment.isSupportedType(format)).toBe(true));
   });
