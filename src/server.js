@@ -23,11 +23,12 @@ const server = stoppable(
 
     // if user is debugging, print all environment variables to check if any is missing	  
     if (isDebugging) {
-      logger.info(`Mandatory Environment Variables: 
+      logger.debug(`Mandatory Environment Variables: 
 - LOG_LEVEL: ${process.env.LOG_LEVEL}
 - PORT: ${process.env.PORT}
 - AWS_COGNITO_POOL_ID: ${process.env.AWS_COGNITO_POOL_ID}
-- AWS_COGNITO_CLIENT_ID: ${process.env.AWS_COGNITO_CLIENT_ID}`);
+- AWS_COGNITO_CLIENT_ID: ${process.env.AWS_COGNITO_CLIENT_ID}
+- HTPASSWD_FILE: ${process.env.HTPASSWD_FILE}`);
     }
   })
 );
