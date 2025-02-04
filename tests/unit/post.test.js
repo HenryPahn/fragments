@@ -47,7 +47,7 @@ describe('POST /v1/fragments', () => {
       .send('This is a fragment')
 
     expect(res.body.status).toEqual('ok');
-    expect(res.body.fragments.type).toEqual('text/plain');
-    expect(res.body.fragments.size).toBe(18);
+    expect(res.body.fragment.type).toEqual('text/plain');
+    expect(res.body.fragment.size).toBe(18);
   });
 });
