@@ -77,11 +77,22 @@ class Fragment {
    */
   static async byId(ownerId, id) {
     // read the fragment from DB
-    const result = await readFragment(ownerId, id); 
+    let result = await readFragment(ownerId, id); 
 
-    // create a new fragment from the result
-    const newFragment = new Fragment(result);
-    return newFragment;
+    // if(result) {
+    //   result = new Fragment(result); 
+    // }
+
+    if(!result) {
+      // throw { message: , status: 404 };
+      const unfound = new Error(`No Fragment with id=${id}`); 
+      unfound.status = 404;
+      throw unfound;
+    }
+  
+    // retyrn a new fragment if result is not undefined. Otherwise, return undefined
+    // return result ? new Fragment(result) : result;
+    return result ? new Fragment(result) : result;
   }
 
   /**
@@ -162,18 +173,19 @@ class Fragment {
   get formats() {
     // list of convertable types 
     const validFragmentConversions = {
-      "text/plain": ["text/plain"],
-      "text/markdown": ["text/markdown", "text/html", "text/plain"],
-      "text/html": ["text/html", "text/plain"],
-      "text/csv": ["text/csv", "text/plain", "application/json"],
-      "application/json": ["application/json", "application/x-yaml", "text/plain"],
-      "application/yaml": ["application/x-yaml", "text/plain"],
-      "image/png": ["image/png", "image/jpeg", "image/webp", "image/gif", "image/avif"],
-      "image/jpeg": ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"],
-      "image/webp": ["image/webp", "image/png", "image/jpeg", "image/gif", "image/avif"],
-      "image/avif": ["image/avif", "image/png", "image/jpeg", "image/webp", "image/gif"],
-      "image/gif": ["image/gif", "image/png", "image/jpeg", "image/webp", "image/avif"],
+      "text/plain": ["txt"],
+      "text/markdown": ["md", "html", "txt"],
+      "text/html": ["html", "txt"],
+      "text/csv": ["csv", "txt", "json"],
+      "application/json": ["json", "yaml", "yml", "txt"],
+      "application/yaml": ["yaml", "txt"],
+      "image/png": ["png", "jpg", "webp", "gif", "avif"],
+      "image/jpeg": ["png", "jpg", "webp", "gif", "avif"],
+      "image/webp": ["png", "jpg", "webp", "gif", "avif"],
+      "image/avif": ["png", "jpg", "webp", "gif", "avif"],
+      "image/gif": ["png", "jpg", "webp", "gif", "avif"],
     };
+    
 
     return validFragmentConversions[this.mimeType];
   }
