@@ -88,6 +88,23 @@ npm run debug
 > [!NOTE]
 > Running server by **dev** and **debug** will display the received request as JSON which is prettier-response. 
 
+- Send request to GET /fragments:
+
+```sh 
+curl -i -u user1@email.com:password1 localhost:8080/v1/fragments
+```
+
+- Send request to POST /fragments: 
+
+```sh 
+curl -i \
+  -X POST \
+  -u user1@email.com:password1 \
+  -H "Content-Type: text/plain" \
+  -d "This is a fragment" \
+  localhost:8080/v1/fragments
+```
+
 ## Amazon Cognito Set Up
 
 1. Go to **Amazon Cognito**, click **Create user pool** button.  
