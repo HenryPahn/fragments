@@ -6,7 +6,6 @@ const { Fragment } = require('../../model/fragment')
 const logger = require('../../logger')
 
 const contentType = require('content-type');
-const { setDefaultHighWaterMark } = require('supertest/lib/test');
 
 /**
  * Creates a new fragment for the current user.
