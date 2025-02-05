@@ -43,6 +43,11 @@ module.exports = async (req, res) => {
     // create a new fragment object
     const fragment = new Fragment({ ownerId: req.user, type: fragmentType, size: dataSize });
 
+    const data = Buffer.from(content);
+
+    // set the data
+    await fragment.setData(data);
+
     // store fragment object into DB
     await fragment.save();
 
@@ -56,7 +61,7 @@ module.exports = async (req, res) => {
     res.setHeader("Location", locationUrl);
 
     const successResponse = createSuccessResponse({
-      fragments: fragment,
+      fragment: fragment,
     })
 
     res.status(201).json(successResponse);
