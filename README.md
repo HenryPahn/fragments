@@ -228,12 +228,12 @@ docker image ls fragments
 docker run --rm --name fragments --env-file env.jest -e LOG_LEVEL=debug -p 8080:8080 fragments:latest
 ```
 
-> [!NOIE]
+> [!NOTE]
 > Tags are important, explaination: 
->   --name fragments: Create a container which has "fragtments" as name. 
->   --env-file env.jest: defind which environment file is being used. There are 2 in our project: .env and env.jest. .env uses AWS cognito and env.jest uses .htpasswd for authentication. 
->   LOG_LEVEL=debug: This is important config, otherwise, our log looks like a mess. 
->   -p 8080:8080 : define which port is used on host and which port is used in the container. The 8080 on left hand is on the host, and the right hand is in the container. 
+> --name fragments: Create a container which has "fragtments" as name. 
+> --env-file env.jest: defind which environment file is being used. There are 2 in our project: .env and env.jest. .env uses AWS cognito and env.jest uses .htpasswd for authentication. 
+> LOG_LEVEL=debug: This is important config, otherwise, our log looks like a mess. 
+> -p 8080:8080 : define which port is used on host and which port is used in the container. The 8080 on left hand is on the host, and the right hand is in the container. 
 
 - Detaching a container(we basically add switch -d to the start command): 
 ```sh 
@@ -250,6 +250,6 @@ docker ps
 docker logs -f <docker id> 
 ```
 
-> [!NOIE]
+> [!NOTE]
 > -f is an optional switch. This allows you to follow the log(keep printing everything happens in log).
 
