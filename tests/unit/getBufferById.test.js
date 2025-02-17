@@ -31,10 +31,8 @@ describe('GET /v1/fragments/:id', () => {
     const res = await request(app)
       .get(`/v1/fragments/${fragment.id}`)
       .auth('user1@email.com', 'password1');
-    
     expect(res.status).toEqual(200)
-    expect(res.body.status).toEqual('ok');
-    expect(res.body.fragment).toEqual(fragment);
+    expect(res.body.toString()).toEqual('This is a fragment');
   })
 
   // If the authenticatedd user find an fragment converted into an invalid covertable type 

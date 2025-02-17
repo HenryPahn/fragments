@@ -222,6 +222,22 @@ Download docker on:
 docker build -t fragments:latest .
 ```
 
+- Tag a Docker image: 
+```sh 
+docker tag fragments username/fragments:tag
+```
+
+- push an image to docker hub: 
+```sh 
+docker login
+docker push username/fragments:tag
+```
+
+- push all related image(including tags): 
+```sh 
+docker push --all-tags user/fragments
+```
+
 - Show all built image: 
 ```sh
 docker image ls fragments
@@ -256,4 +272,18 @@ docker logs -f <docker id>
 
 > [!NOTE]
 > **-f** is an optional switch. This allows you to follow the log(keep printing everything happens in log).
+
+## Login docker 
+- On WSL2: 
+```sh 
+docker login 
+```
+
+- On EC2: 
+```sh 
+docker login -u <docker username> 
+```
+
+> [!NOTE]
+> Access Token is neccessary in this case. Go to your account setting in Docker hub. Then create a new key in personal access token. Achieve this token and make it private for you only. 
 

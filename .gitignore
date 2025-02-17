@@ -10,3 +10,5 @@ coverage/
 # SSH private key for AWS
 .ssh/
 
+# docker access token 
+.docker/

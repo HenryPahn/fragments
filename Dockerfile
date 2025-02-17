@@ -1,7 +1,7 @@
 # Dockerfile
 
-# Use node version 22.12.0
-FROM node:22.12.0
+# Stage 1 - base: Set up env variables 
+FROM node:22.12.0-alpine AS base
 
 LABEL maintainer="Henry Pahn <pphan-thanh-hoang@myseneca.ca>"
 LABEL description="Fragments node.js microservice"
@@ -17,8 +17,15 @@ ENV NPM_CONFIG_LOGLEVEL=warn
 # https://docs.npmjs.com/cli/v8/using-npm/config#color
 ENV NPM_CONFIG_COLOR=false
 
+# Optimizae Node.js apps for production
+ENV NODE_ENV=production
+
 # Use /app as our working directory
 WORKDIR /app
+
+###########################################################################
+# Stage 2 - build: Build dependencies
+FROM base AS build
 
 # Option 2: relative path - Copy the package.json and package-lock.json
 # files into the working dir (/app).  NOTE: this requires that we have
@@ -26,7 +33,17 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install node dependencies defined in package-lock.json
-RUN npm install
+RUN npm ci --production
+
+###########################################################################
+# Stage 3 - production: start app
+FROM build AS production
+
+# Copy only necessary files from the build stage
+COPY --from=build /app/node_modules ./node_modules
+
+# Copy package.json to final stage
+COPY package*.json ./
 
 # Copy src to /app/src/
 COPY ./src ./src

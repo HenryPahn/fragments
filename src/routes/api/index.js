@@ -33,7 +33,10 @@ const rawBody = () =>
 router.post('/fragments', rawBody(), require('./post'));
 
 // GET /fragments/:id
-router.get('/fragments/:id.:ext?', require('./getById'));
+router.get('/fragments/:id.:ext?', require('./getBufferById'));
+
+// GET /fragments/:id/info
+router.get('/fragments/:id/info', require('./getMetaDataById'));
 
 // Other routes (POST, DELETE, etc.) will go here later on...
 

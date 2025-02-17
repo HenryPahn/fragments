@@ -1,4 +1,4 @@
-// src/routes/api/get.js 
+// src/routes/api/getMetaDataById.js 
 
 // Functions return successful responses 
 const { createSuccessResponse, createErrorResponse } = require('../../response')
@@ -12,7 +12,9 @@ module.exports = async (req, res) => {
   try {
     const fragment = await Fragment.byId(req.user, req.params.id);
 
-    const fragmentData = await fragment.getData(); 
+    if (!fragment) {
+      throw { message: `No fragment found ${fragment}`, status: 404 };
+    }
 
     // Check if the current npm script is 'dev' or 'debug'
     const isDebugging = process.env.npm_lifecycle_event === 'dev' || process.env.npm_lifecycle_event === 'debug';
@@ -22,24 +24,15 @@ module.exports = async (req, res) => {
       logger.debug(`Request to GET /fragments/:id :
 - User token: ${req.user}
 - Fragment id: ${req.params.id}
-- Valid conversion extensions: ${fragment.formats}
-- Fragment Data: ${fragmentData}
-- Extension: ${req.params.ext}`);
-    }
-    
-    if (req.params.ext && !fragment.formats.find(ext => ext === req.params.ext)) {
-      throw { message: `${fragment.type} coudn't be converted to ${req.params.ext}`, status: 415 };
+- Fragment: ${fragment}`);
     }
 
-    if(req.params.ext === 'txt') {
-      res.status(200).send(fragmentData);
-    } else {
-      const successResponse = createSuccessResponse({
-        fragment: fragment,
-      })
-  
-      res.status(200).json(successResponse);
-    }
+    const successResponse = createSuccessResponse({
+      fragment: fragment,
+    })
+
+    res.status(200).send(successResponse);
+
   } catch (err) {
     const status = err.status || 500;
     const message = err.message || 'unable to process request';
