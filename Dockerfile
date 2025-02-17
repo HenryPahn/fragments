@@ -17,6 +17,9 @@ ENV NPM_CONFIG_LOGLEVEL=warn
 # https://docs.npmjs.com/cli/v8/using-npm/config#color
 ENV NPM_CONFIG_COLOR=false
 
+# Optimizae Node.js apps for production
+ENV NODE_ENV=production
+
 # Use /app as our working directory
 WORKDIR /app
 
