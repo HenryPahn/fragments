@@ -1,13 +1,10 @@
 # Dockerfile
 
-# Use node version 22.12.0
-FROM node:22.12.0-slim
+# Stage 1 - base: Set up env variables 
+FROM node:22.12.0-alpine AS base
 
 LABEL maintainer="Henry Pahn <pphan-thanh-hoang@myseneca.ca>"
 LABEL description="Fragments node.js microservice"
-
-# set app to production to enable performance optimizations
-ENV NODE_ENV=production
 
 # We default to use port 8080 in our service
 ENV PORT=8080
@@ -23,13 +20,27 @@ ENV NPM_CONFIG_COLOR=false
 # Use /app as our working directory
 WORKDIR /app
 
+###########################################################################
+# Stage 2 - build: Build dependencies
+FROM base AS build
+
 # Option 2: relative path - Copy the package.json and package-lock.json
 # files into the working dir (/app).  NOTE: this requires that we have
 # already set our WORKDIR in a previous step.
 COPY package*.json ./
 
 # Install node dependencies defined in package-lock.json
-RUN npm ci --include=dev
+RUN npm ci --production
+
+###########################################################################
+# Stage 3 - production: start app
+FROM build AS production
+
+# Copy only necessary files from the build stage
+COPY --from=build /app/node_modules ./node_modules
+
+# Copy package.json to final stage
+COPY package*.json ./
 
 # Copy src to /app/src/
 COPY ./src ./src
