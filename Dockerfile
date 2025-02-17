@@ -1,10 +1,13 @@
 # Dockerfile
 
 # Use node version 22.12.0
-FROM node:22.12.0
+FROM node:22.12.0-slim
 
 LABEL maintainer="Henry Pahn <pphan-thanh-hoang@myseneca.ca>"
 LABEL description="Fragments node.js microservice"
+
+# set app to production to enable performance optimizations
+ENV NODE_ENV=production
 
 # We default to use port 8080 in our service
 ENV PORT=8080
@@ -26,7 +29,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install node dependencies defined in package-lock.json
-RUN npm install
+RUN npm ci --include=dev
 
 # Copy src to /app/src/
 COPY ./src ./src
