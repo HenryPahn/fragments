@@ -52,7 +52,7 @@ module.exports = async (req, res) => {
     await fragment.save();
 
     // Get the API base URL from environment or fallback to req.headers.host
-    const apiBaseUrl = process.env.API_URL || `http://${req.headers.host}`;
+    const apiBaseUrl = `http://${req.headers.host}` || process.env.API_URL;
 
     // Construct the Location URL
     const locationUrl = new URL(`/v1/fragments/${fragment.id}`, apiBaseUrl).href;
