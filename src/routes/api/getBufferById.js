@@ -1,9 +1,10 @@
 // src/routes/api/getBufferById.js 
 
-// Functions return successful responses 
 const { createErrorResponse } = require('../../response')
-const { Fragment } = require('../../model/fragment')
+const { Fragment, extensions } = require('../../model/fragment')
 const logger = require('../../logger')
+const { convertToTxt } = require('../../converter')
+
 
 /**
  * Creates a new fragment for the current user.
@@ -11,8 +12,6 @@ const logger = require('../../logger')
 module.exports = async (req, res) => {
   try {
     const fragment = await Fragment.byId(req.user, req.params.id);
-
-    const fragmentData = await fragment.getData(); 
 
     // Check if the current npm script is 'dev' or 'debug'
     const isDebugging = process.env.npm_lifecycle_event === 'dev' || process.env.npm_lifecycle_event === 'debug';
@@ -23,19 +22,26 @@ module.exports = async (req, res) => {
 - User token: ${req.user}
 - Fragment id: ${req.params.id}
 - Valid conversion extensions: ${fragment.formats}
-- Fragment Data: ${fragmentData}
+- Fragment Type: ${fragment.type}
 - Extension: ${req.params.ext}`);
     }
-    
+
     if (req.params.ext && !fragment.formats.find(ext => ext === req.params.ext)) {
       throw { message: `${fragment.type} coudn't be converted to ${req.params.ext}`, status: 415 };
     }
 
-    if(req.params.ext === 'txt') {
-      res.status(200).send(fragmentData);
+    let fragmentData = await fragment.getData();
+
+    if (req.params.ext == "txt") {
+      // Set the Location header
+      res.setHeader("Content-Type", extensions[req.params.ext]);
+      fragmentData = convertToTxt(fragment.type, fragmentData);
     } else {
-      res.status(200).send(fragmentData);
+      // Set the Location header
+      res.setHeader("Content-Type", fragment.type);
     }
+
+    res.status(200).send(fragmentData);
   } catch (err) {
     const status = err.status || 500;
     const message = err.message || 'unable to process request';
