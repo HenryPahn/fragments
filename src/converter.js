@@ -1,12 +1,14 @@
 // src/converter.js
 
-const marked = require('marked');
+const MarkdownIt = require('markdown-it');
 const { JSDOM } = require('jsdom');
 const removeMd = require('remove-markdown');
 const yaml = require('js-yaml');
 
 function convertToTxt(fragmentType, data) {
-  let inputString = data.toString('utf8');
+  const inputString = data.toString('utf8');
+
+  let txtString;
 
   switch (fragmentType) {
     case 'text/plain':
@@ -14,9 +16,7 @@ function convertToTxt(fragmentType, data) {
 
     case 'text/markdown': {
       // Remove Markdown formatting
-      const txtString = removeMd(inputString);
-      // Return the resulting text as a Buffer
-      return Buffer.from(txtString, 'utf8');
+      txtString = removeMd(inputString);
     }
 
     case 'text/html': {
@@ -24,21 +24,15 @@ function convertToTxt(fragmentType, data) {
       const dom = new JSDOM(inputString);
 
       // Extract the text content from the body element
-      const textContent = dom.window.document.body.textContent || '';
-
-      // Return the text as a Buffer
-      return Buffer.from(textContent, 'utf8');
+      txtString = dom.window.document.body.textContent || '';
     }
 
     case 'text/csv': {
       // Convert CSV to text
-      const txtString = inputString
+      txtString = inputString
         .split('\n')                   // split into lines
         .map(line => line.split(',').join('\t')) // replace commas with tabs in each line
         .join('\n');                   // join lines back together
-
-      // Return the result as a Buffer
-      return Buffer.from(txtString, 'utf8');
     }
 
     case 'application/json': {
@@ -46,22 +40,19 @@ function convertToTxt(fragmentType, data) {
       let jsonData = JSON.parse(inputString);
 
       // Pretty-print the JSON object as a plain text string.
-      const txtString = JSON.stringify(jsonData);
-
-      // Return the plain text as a Buffer.
-      return Buffer.from(txtString, 'utf8');
+      txtString = JSON.stringify(jsonData);
     }
 
     case 'application/yaml': {
       let parsedObject = yaml.load(inputString);
 
       // Convert the object to a pretty-printed JSON string as plain text.
-      const txtString = JSON.stringify(parsedObject);
-
-      // Return the resulting text as a Buffer.
-      return Buffer.from(txtString, 'utf8');
+      txtString = JSON.stringify(parsedObject);
     }
   }
+
+  // Return the resulting text as a Buffer
+  return Buffer.from(txtString, 'utf8');
 };
 
 function convertToMarkdown(fragmentType, data) {
@@ -71,10 +62,24 @@ function convertToMarkdown(fragmentType, data) {
   }
 };
 
-// Helper function to strip HTML tags from a string
-function stripHtml(htmlString) {
-  const dom = new JSDOM(htmlString);
-  return dom.window.document.body.textContent || '';
-}
+function convertToHtml(fragmentType, data) {
+  switch (fragmentType) {
+    case 'text/html':
+      return data;
 
-module.exports = { convertToTxt, convertToMarkdown };
+    case 'text/markdown': {
+      const md = new MarkdownIt();
+
+      // Convert the Markdown buffer to a UTF-8 string.
+      const mdString = data.toString('utf8');
+
+      // Convert Markdown to HTML.
+      const htmlString = md.render(mdString);
+
+      // Return the resulting HTML as a Buffer.
+      return Buffer.from(htmlString, 'utf8');
+    }
+  }
+};
+
+module.exports = { convertToTxt, convertToMarkdown, convertToHtml };

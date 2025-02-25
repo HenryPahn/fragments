@@ -3,7 +3,7 @@
 const { createErrorResponse } = require('../../response')
 const { Fragment, extensions } = require('../../model/fragment')
 const logger = require('../../logger')
-const { convertToTxt } = require('../../converter')
+const { convertToTxt, convertToHtml } = require('../../converter')
 
 
 /**
@@ -32,14 +32,19 @@ module.exports = async (req, res) => {
 
     let fragmentData = await fragment.getData();
 
-    if (req.params.ext == "txt") {
-      // Set the Location header
+    if(req.params.ext) {
       res.setHeader("Content-Type", extensions[req.params.ext]);
-      fragmentData = convertToTxt(fragment.type, fragmentData);
     } else {
-      // Set the Location header
       res.setHeader("Content-Type", fragment.type);
     }
+
+    if (req.params.ext == "txt") {
+      // Set the Location header
+      fragmentData = convertToTxt(fragment.type, fragmentData);
+    } 
+    if (req.params.ext == "html") {
+      fragmentData = convertToHtml(fragment.type, fragmentData);
+    } 
 
     res.status(200).send(fragmentData);
   } catch (err) {
