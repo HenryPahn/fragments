@@ -14,6 +14,20 @@ const {
   deleteFragment,
 } = require('./data');
 
+const extensions = {
+  "txt": "text/plain",
+  "md": "text/markdown",
+  "html": "text/html",
+  "csv": "text/csv",
+  "json": "application/json",
+  "yaml": "application/yaml",
+  "png": "image/png",
+  "jpg": "image/jpeg",
+  "webp": "image/webp",
+  "avif": "image/avif",
+  "gif": "image/gif",
+};
+
 class Fragment {
   /**
    * Contructor 
@@ -185,8 +199,7 @@ class Fragment {
       "image/avif": ["png", "jpg", "webp", "gif", "avif"],
       "image/gif": ["png", "jpg", "webp", "gif", "avif"],
     };
-    
-
+  
     return validFragmentConversions[this.mimeType];
   }
 
@@ -197,9 +210,10 @@ class Fragment {
    */
   static isSupportedType(value) {
     // list of supported types 
-    const supportedTypes = [`text/plain`, 'text/plain; charset=utf-8', `text/markdown`, `text/html`, `application/json`, `image/png`, `image/jpeg`, `image/webp`, `image/gif`];
+    const supportedTypes = [`text/plain`, 'text/plain; charset=utf-8', `text/markdown`, `text/html`, `text/csv`, `application/json`, `application/yaml`];
     return supportedTypes.includes(value)
   }
 }
 
+module.exports.extensions = extensions;
 module.exports.Fragment = Fragment;
