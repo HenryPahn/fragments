@@ -37,7 +37,7 @@
   "dependencies": {
     "markdown-it": "^14.1.0",
     "aws-jwt-verify": "^5.0.0",
-    "compression": "^1.7.5",
+    "compression": "^1.8.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
