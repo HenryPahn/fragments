@@ -54,6 +54,11 @@ npm run test:watch
 npm coverage
 ```
 
+- Tag release: 
+```sh 
+npm version 0.7.0 -m "Release v0.7.0"
+```
+
 - Send GET request to PORT: 
 
 ```sh
@@ -287,3 +292,14 @@ docker login -u <docker username>
 > [!NOTE]
 > Access Token is neccessary in this case. Go to your account setting in Docker hub. Then create a new key in personal access token. Achieve this token and make it private for you only. 
 
+- Login the docker client with AWS ECR: 
+```sh 
+# Define Environment Variables for all AWS Credentials.  Use the Learner Lab AWS CLI Credentials:
+$ export AWS_ACCESS_KEY_ID=<learner-lab-access-key-id>
+$ export AWS_SECRET_ACCESS_KEY=<learner-lab-secret-access-key>
+$ export AWS_SESSION_TOKEN=<learner-lab-session_token>
+$ export AWS_DEFAULT_REGION=us-east-1
+
+# Login the EC2's docker client, swapping your full ECR registry name
+$ docker login -u AWS -p $(aws ecr get-login-password --region us-east-1) 4xxxxxxxxxx5.dkr.ecr.us-east-1.amazonaws.com
+```
