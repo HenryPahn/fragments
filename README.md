@@ -48,6 +48,12 @@ npm test
 npm run test:watch
 ```
 
+- Run intergration tests: 
+
+```sh
+npm run test:integration
+```
+
 - Show the report of tests, and display the code lines are covered by tests: 
 
 ```sh
@@ -302,4 +308,25 @@ $ export AWS_DEFAULT_REGION=us-east-1
 
 # Login the EC2's docker client, swapping your full ECR registry name
 $ docker login -u AWS -p $(aws ecr get-login-password --region us-east-1) 4xxxxxxxxxx5.dkr.ecr.us-east-1.amazonaws.com
+```
+
+## Docker Compose 
+- Docker compose build and run 
+```sh 
+docker compose up 
+```
+
+- Docker compose run services in the background using -d
+```sh 
+docker compose up -d
+```
+
+- Docker compose stop
+```sh 
+docker compose down
+```
+
+- Docker compose forces to rebuild
+```sh 
+docker compose up --build
 ```
