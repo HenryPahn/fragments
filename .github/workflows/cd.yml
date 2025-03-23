@@ -81,6 +81,8 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPO: fragments
           VERSION_TAG: ${{ github.ref_name }}
+          AWS_COGNITO_POOL_ID: ${{ secrets.AWS_COGNITO_POOL_ID }}
+          AWS_COGNITO_CLIENT_ID: ${{ secrets.AWS_COGNITO_CLIENT_ID }} 
         with:
           task-definition: fragments-definition.json
           container-name: fragments
@@ -92,8 +94,6 @@ jobs:
           environment-variables: |
             LOG_LEVEL=debug
             NODE_ENV=production
-            AWS_COGNITO_CLIENT_ID=${{ secrets.AWS_COGNITO_CLIENT_ID }}
-            AWS_COGNITO_POOL_ID=${{ secrets.AWS_COGNITO_POOL_ID }}
             API_URL=http://localhost:8080
             AWS_S3_ENDPOINT_URL=http://localhost:4566
             AWS_REGION=us-east-1
