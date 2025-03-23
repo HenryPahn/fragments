@@ -3,7 +3,7 @@
   "containerDefinitions": [
       {
           "name": "fragments-container",
-          "image": "henrypahn/fragments:latest",
+          "image": "Add later",
           "cpu": 256,
           "memoryReservation": 512,
           "portMappings": [
