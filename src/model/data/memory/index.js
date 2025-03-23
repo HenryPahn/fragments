@@ -1,4 +1,7 @@
 const MemoryDB = require('./memory-db');
+const logger = require("../../../logger");
+
+logger.info("Using in-memory DB")
 
 // Create two in-memory databases: one for fragment metadata and the other for raw data
 const data = new MemoryDB();
