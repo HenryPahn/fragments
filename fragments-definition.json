@@ -113,6 +113,5 @@
   },
   "registeredAt": "2025-03-23T17:39:55.595Z",
   "registeredBy": "arn:aws:sts::363027596372:assumed-role/voclabs/user3534761=Hoang_Phan",
-  "enableFaultInjection": false,
   "tags": []
 }
