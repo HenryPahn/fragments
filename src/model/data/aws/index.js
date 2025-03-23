@@ -37,6 +37,8 @@ async function writeFragmentData(ownerId, id, data) {
     Body: data,
   };
 
+  logger.debug(`Bucker: ${process.env.AWS_S3_BUCKET_NAME}`)
+
   // Create a PUT Object command to send to S3
   const command = new PutObjectCommand(params);
 
@@ -124,6 +126,7 @@ async function deleteFragment(ownerId, id) {
   const command = new DeleteObjectCommand(params);
 
   try {
+    await metadata.del(ownerId, id);
     // Delete object from the Amazon S3 bucket
     await s3Client.send(command);
   } catch (err) {
