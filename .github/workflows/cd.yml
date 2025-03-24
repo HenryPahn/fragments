@@ -90,11 +90,10 @@ jobs:
           # for any values that should not be checked into git directly.  Here are
           # a few to get you started, but you should fill in the rest yourself.
           environment-variables: |
-            LOG_LEVEL=debug
-            NODE_ENV=production
+            PORT=80
             API_URL=http://localhost:8080
             AWS_REGION=us-east-1
-            LOG_LEVEL=info
+            LOG_LEVEL=debug
             NODE_ENV=production
             AWS_S3_BUCKET_NAME=pphan-thanh-hoang-fragments
             AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
