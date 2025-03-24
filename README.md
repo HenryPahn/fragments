@@ -65,6 +65,16 @@ npm coverage
 npm version 0.7.0 -m "Release v0.7.0"
 ```
 
+- Patch release: 
+```sh 
+npm version patch
+```
+
+- Push new tag to Github: 
+```sh 
+git push origin main --tags
+```
+ 
 - Send GET request to PORT: 
 
 ```sh
@@ -329,4 +339,9 @@ docker compose down
 - Docker compose forces to rebuild
 ```sh 
 docker compose up --build
+```
+
+- Run Docker Compose using the local S3 (MinIO):
+```sh 
+docker compose -f docker-compose.local.yml up -d
 ```

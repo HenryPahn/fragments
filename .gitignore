@@ -12,3 +12,6 @@ coverage/
 
 # docker access token 
 .docker/
+
+# minio bucket
+minio/
