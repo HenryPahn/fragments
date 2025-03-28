@@ -345,3 +345,8 @@ docker compose up --build
 ```sh 
 docker compose -f docker-compose.local.yml up -d
 ```
+
+- Store data to disk: 
+```sh 
+./scripts/local-aws-setup.sh
+```
