@@ -31,7 +31,7 @@ jsonpath "$.fragment.type" == "text/plain"
 # 19 is the length of our fragment data: 'This is a fragment!'
 jsonpath "$.fragment.size" == 9
 # Capture the Location URL into a variable named `url`
-[Captures]
+[Captures]  
 url: header "Location"
 
 # 2. Try to GET the fragment we just posted by its URL
