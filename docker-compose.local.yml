@@ -10,13 +10,19 @@ services:
       - HTPASSWD_FILE=tests/.htpasswd
       # Use the LOG_LEVEL set in the host environment, or default to debug
       - LOG_LEVEL=${LOG_LEVEL:-debug}
+
       # AWS credentials to use
-      - AWS_ACCESS_KEY_ID=minio-access-key
-      - AWS_SECRET_ACCESS_KEY=minio-secret-key
+      - AWS_ACCESS_KEY_ID=henrypahn
+      - AWS_SECRET_ACCESS_KEY=henrypahn
       - AWS_REGION=us-east-1
+
       # Use minio as our S3 endpoint
       - AWS_S3_ENDPOINT_URL=http://minio:9000
       - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME:-fragments}
+
+      # Setup DynamoDB local
+      - AWS_DYNAMODB_ENDPOINT_URL=http://dynamodb-local:8000
+      - AWS_DYNAMODB_TABLE_NAME=${AWS_DYNAMODB_TABLE_NAME:-fragments}
     ports:
       - '8080:8080'
 
@@ -31,10 +37,19 @@ services:
     environment:
       # See https://docs.min.io/minio/baremetal/reference/minio-server/minio-server.html#environment-variables
       # Root user (Access Key, typically a long, random string)
-      - MINIO_ROOT_USER=minio-access-key
+      - MINIO_ROOT_USER=henrypahn
       # Root user's password (Secret Key, typically a long, random string)
-      - MINIO_ROOT_PASSWORD=minio-secret-key
+      - MINIO_ROOT_PASSWORD=henrypahn
     volumes:
       # Use what's in `./minio/data` as the storage volume
       # NOTE: add this to your .gitignore
       - ./minio/data:/data
+
+  dynamodb-local:
+    image: amazon/dynamodb-local
+    ports:
+      # Default port is 8000
+      - '8000:8000'
+    # Run the database in memory, see:
+    # https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.UsageNotes.html
+    command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
