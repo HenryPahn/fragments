@@ -15,7 +15,6 @@ describe('PUT /v1/fragments/:id', () => {
       .send('This is a fragment')
 
     fragment = res.body.fragment;
-    console.log(fragment);
   });
 
   // If the request is missing the Authorization header, it should be forbidden
