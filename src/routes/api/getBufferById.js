@@ -3,7 +3,7 @@
 const { createErrorResponse } = require('../../response')
 const { Fragment, extensions } = require('../../model/fragment')
 const logger = require('../../logger')
-const { convertToTxt, convertToHtml, convertToJSON, convertToYAML } = require('../../converter')
+const { convertToTxt, convertToHtml, convertToJSON, convertToYAML, convertToPNG, convertToJPEG, convertToWEBP, convertToAVIF, convertToGIF } = require('../../converter')
 
 /**
  * Creates a new fragment for the current user.
@@ -39,16 +39,31 @@ module.exports = async (req, res) => {
 
     if (req.params.ext == "txt") {
       // Set the Location header
-      fragmentData = convertToTxt(fragment.type, fragmentData);
+      fragmentData = await convertToTxt(fragment.type, fragmentData);
     } 
     if (req.params.ext == "html") {
-      fragmentData = convertToHtml(fragment.type, fragmentData);
+      fragmentData = await convertToHtml(fragment.type, fragmentData);
     } 
     if (req.params.ext == "json") {
-      fragmentData = convertToJSON(fragment.type, fragmentData);
+      fragmentData = await convertToJSON(fragment.type, fragmentData);
     } 
     if (req.params.ext == "yaml" || req.params.ext == "yml") {
-      fragmentData = convertToYAML(fragment.type, fragmentData);
+      fragmentData = await convertToYAML(fragment.type, fragmentData);
+    } 
+    if (req.params.ext == "png") {
+      fragmentData = await convertToPNG(fragment.type, fragmentData);
+    } 
+    if (req.params.ext == "jpg") {
+      fragmentData = await convertToJPEG(fragment.type, fragmentData);
+    } 
+    if (req.params.ext == "webp") {
+      fragmentData = await convertToWEBP(fragment.type, fragmentData);
+    } 
+    if (req.params.ext == "avif") {
+      fragmentData = await convertToAVIF(fragment.type, fragmentData);
+    } 
+    if (req.params.ext == "gif") {
+      fragmentData = await convertToGIF(fragment.type, fragmentData);
     } 
 
     res.status(200).send(fragmentData);

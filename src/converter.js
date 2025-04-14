@@ -3,7 +3,7 @@
 const MarkdownIt = require('markdown-it');
 const { markdownToTxt } = require('markdown-to-txt');
 const { convert } = require('html-to-text');
-const csv = require('csvtojson')
+const sharp = require('sharp');
 const { jsonToPlainText } = require("json-to-plain-text");
 const { parse } = require("yaml");
 const csvToJson = require("convert-csv-to-json");
@@ -109,5 +109,60 @@ function convertToYAML(fragmentType, data) {
   }
 };
 
-module.exports = { convertToTxt, convertToHtml, convertToJSON, convertToYAML };
+async function convertToPNG(fragmentType, data) {
+  switch (fragmentType) {
+    case 'image/png':
+    case 'image/jpeg':
+    case 'image/webp':
+    case 'image/avif':
+    case 'image/gif':
+      return await sharp(data).png().toBuffer();
+  }
+}
+
+async function convertToJPEG(fragmentType, data) {
+  switch (fragmentType) {
+    case 'image/png':
+    case 'image/jpeg':
+    case 'image/webp':
+    case 'image/avif':
+    case 'image/gif':
+      return await sharp(data).jpeg().toBuffer();
+  }
+}
+
+async function convertToWEBP(fragmentType, data) {
+  switch (fragmentType) {
+    case 'image/png':
+    case 'image/jpeg':
+    case 'image/webp':
+    case 'image/avif':
+    case 'image/gif':
+      return await sharp(data).webp().toBuffer();
+  }
+}
+
+async function convertToAVIF(fragmentType, data) {
+  switch (fragmentType) {
+    case 'image/png':
+    case 'image/jpeg':
+    case 'image/webp':
+    case 'image/avif':
+    case 'image/gif':
+      return await sharp(data).avif().toBuffer();
+  }
+}
+
+async function convertToGIF(fragmentType, data) {
+  switch (fragmentType) {
+    case 'image/png':
+    case 'image/jpeg':
+    case 'image/webp':
+    case 'image/avif':
+    case 'image/gif':
+      return await sharp(data).gif().toBuffer();
+  }
+}
+
+module.exports = { convertToTxt, convertToHtml, convertToJSON, convertToYAML, convertToPNG, convertToJPEG, convertToWEBP, convertToAVIF, convertToGIF };
 
