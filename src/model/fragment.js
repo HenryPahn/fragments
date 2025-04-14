@@ -21,6 +21,7 @@ const extensions = {
   "csv": "text/csv",
   "json": "application/json",
   "yaml": "application/yaml",
+  "yml": "application/yml",
   "png": "image/png",
   "jpg": "image/jpeg",
   "webp": "image/webp",
@@ -210,7 +211,7 @@ class Fragment {
    */
   static isSupportedType(value) {
     // list of supported types 
-    const supportedTypes = [`text/plain`, 'text/plain; charset=utf-8', `text/markdown`, `text/html`, `text/csv`, `application/json`, `application/yaml`];
+    const supportedTypes = [`text/plain`, 'text/plain; charset=utf-8', `text/markdown`, `text/html`, `text/csv`, `application/json`, `application/yaml`, `image/png`, `image/jpeg`, `image/webp`, `image/avif`, `image/gif`, ];
     return supportedTypes.includes(value)
   }
 }

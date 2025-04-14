@@ -53,4 +53,82 @@ describe('GET /v1/fragments/:id', () => {
     expect(res.status).toEqual(200)
     expect(res.text).toEqual("This is a fragment");
   })
+
+  test('convert html fragment to txt', async () => {
+    const createRes = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('Content-Type', 'text/html')
+      .send('<h1>Hello</h1><p>This is a test</p>');
+
+    const htmlFragment = createRes.body.fragment;
+
+    const convertRes = await request(app)
+      .get(`/v1/fragments/${htmlFragment.id}.txt`)
+      .auth('user1@email.com', 'password1');
+
+    expect(convertRes.status).toBe(200);
+  });
+
+  test('converts Markdown fragment to .html', async () => {
+    const createRes = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('Content-Type', 'text/markdown')
+      .send('# Welcome\nThis is a *test*.');
+
+    const mdFragment = createRes.body.fragment;
+
+    const convertRes = await request(app)
+      .get(`/v1/fragments/${mdFragment.id}.html`)
+      .auth('user1@email.com', 'password1');
+
+    expect(convertRes.status).toBe(200);
+  });
+
+  test('converts CSV fragment to .json', async () => {
+    const createRes = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('Content-Type', 'text/csv')
+      .send('name,age\nAlice,30\nBob,25');
+
+    const csvFragment = createRes.body.fragment;
+
+    const convertRes = await request(app)
+      .get(`/v1/fragments/${csvFragment.id}.json`)
+      .auth('user1@email.com', 'password1');
+
+    expect(convertRes.status).toBe(200);
+    expect(convertRes.headers['content-type']).toMatch(/application\/json/);
+
+    const result = JSON.parse(convertRes.text);
+
+    expect(result.length).toBe(2);
+  });
+
+  test('converts JSON fragment to .yaml', async () => {
+    const jsonObject = {
+      name: 'Alice',
+      age: 30,
+      address: {
+        city: 'Wonderland',
+        zip: '12345',
+      },
+    };
+
+    const createRes = await request(app)
+      .post('/v1/fragments')
+      .auth('user1@email.com', 'password1')
+      .set('Content-Type', 'application/json')
+      .send(JSON.stringify(jsonObject));
+
+    const jsonFragment = createRes.body.fragment;
+
+    const convertRes = await request(app)
+      .get(`/v1/fragments/${jsonFragment.id}.yaml`)
+      .auth('user1@email.com', 'password1');
+
+    expect(convertRes.status).toBe(200);
+  });
 });

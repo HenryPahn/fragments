@@ -1,86 +1,77 @@
 // src/converter.js
 
 const MarkdownIt = require('markdown-it');
-// const { JSDOM } = require('jsdom');
-// const removeMd = require('remove-markdown');
-// const yaml = require('js-yaml');
-// const { parse } = require('csv-parse/sync');
+const { markdownToTxt } = require('markdown-to-txt');
+const { convert } = require('html-to-text');
+const sharp = require('sharp');
+const { jsonToPlainText } = require("json-to-plain-text");
+const { parse } = require("yaml");
+const csvToJson = require("convert-csv-to-json");
+const yaml = require("js-yaml");
 
-// function convertToTxt(fragmentType, data) {
-//   const inputString = data.toString('utf8');
+function convertToJSON(fragmentType, data) {
+  // decode binary data 
+  const dataString = new TextDecoder().decode(data);
 
-//   let txtString;
+  switch (fragmentType) {
+    case 'application/json':
+      return data;
 
-//   switch (fragmentType) {
-//     case 'text/plain':
-//       return data;
+    case 'text/csv': {
+      const json = csvToJson.csvStringToJson(dataString);
 
-//     case 'text/markdown': {
-//       // Remove Markdown formatting
-//       txtString = removeMd(inputString);
+      return json;
+    }
+  }
+};
 
-//       // Return the resulting text as a Buffer
-//       return Buffer.from(txtString, 'utf8');
-//     }
+function convertToTxt(fragmentType, data) {
+  // decode binary data 
+  const dataString = new TextDecoder().decode(data);
 
-//     case 'text/html': {
-//       // Parse the HTML string using JSDOM
-//       const dom = new JSDOM(inputString);
+  switch (fragmentType) {
+    case 'text/plain':
+      return data;
 
-//       // Extract the text content from the body element
-//       txtString = dom.window.document.body.textContent || '';
+    case 'text/markdown': {
+      const plainText = markdownToTxt(dataString);
 
-//       // Return the resulting text as a Buffer
-//       return Buffer.from(txtString, 'utf8');
-//     }
+      return plainText;
+    }
 
-//     case 'text/csv': {
-//       // Convert CSV to text
-//       txtString = inputString
-//         .split('\n')                   // split into lines
-//         .map(line => line.split(',').join('\t')) // replace commas with tabs in each line
-//         .join('\n');                   // join lines back together
+    case 'text/html': {
+      const options = {
+        wordwrap: 130,
+      };
 
-//       // Return the resulting text as a Buffer
-//       return Buffer.from(txtString, 'utf8');
-//     }
+      const plainText = convert(dataString, options);
 
-//     case 'application/json': {
-//       // Parse the JSON string.
-//       let jsonData = JSON.parse(inputString);
+      return plainText;
+    }
 
-//       // Pretty-print the JSON object as a plain text string.
-//       txtString = JSON.stringify(jsonData);
+    case 'text/csv': {
+      const json = csvToJson.csvStringToJson(dataString);
 
-//       // Return the resulting text as a Buffer
-//       return Buffer.from(txtString, 'utf8');
-//     }
+      const plainText = jsonToPlainText(json);
+      return plainText;
+    }
 
-//     case 'application/yaml': {
-//       let parsedObject = yaml.load(inputString);
+    case 'application/json': {
+      // parse the data string into JSON object
+      const parsed = JSON.parse(dataString);
 
-//       // Convert the object to a pretty-printed JSON string as plain text.
-//       txtString = JSON.stringify(parsedObject);
+      // Convert to plain text
+      const plainText = jsonToPlainText(parsed);
+      return plainText;
+    }
 
-//       // Return the resulting text as a Buffer
-//       return Buffer.from(txtString, 'utf8');
-//     }
-//   }
-// };
-
-// function convertToMarkdown(fragmentType, data) {
-//   switch (fragmentType) {
-//     case 'text/markdown':
-//       return data;
-//   }
-// };
-
-// function convertToCSV(fragmentType, data) {
-//   switch (fragmentType) {
-//     case 'text/csv':
-//       return data;
-//   }
-// };
+    case 'application/yaml': {
+      const jsonObject = parse(dataString);
+      const plainText = jsonToPlainText(jsonObject);
+      return plainText;
+    }
+  }
+};
 
 function convertToHtml(fragmentType, data) {
   switch (fragmentType) {
@@ -102,17 +93,76 @@ function convertToHtml(fragmentType, data) {
   }
 };
 
-// async function convertToJSON(fragmentType, data) {
-//   switch (fragmentType) {
-//     case 'application/json':
-//       return data;
+function convertToYAML(fragmentType, data) {
+  // decode binary data 
+  const dataString = new TextDecoder().decode(data);
 
-//     case 'text/csv': {
-//       return data;
-//     }
-//   }
-// };
+  switch (fragmentType) {
+    case 'application/json': {
+      // parse the data string into JSON object
+      const parsed = JSON.parse(dataString);
 
-module.exports = { convertToHtml };
+      const yamlString = yaml.dump(parsed);
 
-// module.exports = { convertToTxt, convertToMarkdown, convertToHtml, convertToCSV, convertToJSON };
+      return yamlString;
+    }
+  }
+};
+
+async function convertToPNG(fragmentType, data) {
+  switch (fragmentType) {
+    case 'image/png':
+    case 'image/jpeg':
+    case 'image/webp':
+    case 'image/avif':
+    case 'image/gif':
+      return await sharp(data).png().toBuffer();
+  }
+}
+
+async function convertToJPEG(fragmentType, data) {
+  switch (fragmentType) {
+    case 'image/png':
+    case 'image/jpeg':
+    case 'image/webp':
+    case 'image/avif':
+    case 'image/gif':
+      return await sharp(data).jpeg().toBuffer();
+  }
+}
+
+async function convertToWEBP(fragmentType, data) {
+  switch (fragmentType) {
+    case 'image/png':
+    case 'image/jpeg':
+    case 'image/webp':
+    case 'image/avif':
+    case 'image/gif':
+      return await sharp(data).webp().toBuffer();
+  }
+}
+
+async function convertToAVIF(fragmentType, data) {
+  switch (fragmentType) {
+    case 'image/png':
+    case 'image/jpeg':
+    case 'image/webp':
+    case 'image/avif':
+    case 'image/gif':
+      return await sharp(data).avif().toBuffer();
+  }
+}
+
+async function convertToGIF(fragmentType, data) {
+  switch (fragmentType) {
+    case 'image/png':
+    case 'image/jpeg':
+    case 'image/webp':
+    case 'image/avif':
+    case 'image/gif':
+      return await sharp(data).gif().toBuffer();
+  }
+}
+
+module.exports = { convertToTxt, convertToHtml, convertToJSON, convertToYAML, convertToPNG, convertToJPEG, convertToWEBP, convertToAVIF, convertToGIF };
+

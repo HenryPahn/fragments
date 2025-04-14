@@ -338,15 +338,16 @@ docker compose down
 
 - Docker compose forces to rebuild
 ```sh 
-docker compose up --build
+docker compose up --build -d
 ```
 
 - Run Docker Compose using the local S3 (MinIO):
 ```sh 
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker-compose.local.yml up --build -d
 ```
 
-- Store data to disk: 
+- Initialize data for local testing
 ```sh 
 ./scripts/local-aws-setup.sh
+./scripts/local-minio-setup.sh
 ```

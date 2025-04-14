@@ -35,6 +35,9 @@ router.post('/fragments', rawBody(), require('./post'));
 // DELETE /fragments/:id
 router.delete('/fragments/:id', require('./delete'));
 
+// PUT /fragments/:id
+router.put('/fragments/:id', rawBody(), require('./put'));
+
 // GET /fragments/:id
 router.get('/fragments/:id.:ext?', require('./getBufferById'));
 

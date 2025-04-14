@@ -4,8 +4,6 @@ const { DeleteObjectCommand, PutObjectCommand, GetObjectCommand } = require('@aw
 const { PutCommand, GetCommand, QueryCommand, DeleteCommand } = require('@aws-sdk/lib-dynamodb');
 const logger = require("../../../logger");
 
-logger.info("Using AWS S3")
-
 // Writes a fragment to DynamoDB. Returns a Promise.
 function writeFragment(fragment) {
   // Configure our PUT params, with the name of the table and item (attributes and keys)
