@@ -3,10 +3,7 @@
 const { createErrorResponse } = require('../../response')
 const { Fragment, extensions } = require('../../model/fragment')
 const logger = require('../../logger')
-const { convertToHtml } = require('../../converter')
-
-// const { convertToTxt, convertToHtml, convertToMarkdown, convertToCSV, convertToJSON } = require('../../converter')
-
+const { convertToTxt, convertToHtml, convertToJSON, convertToYAML } = require('../../converter')
 
 /**
  * Creates a new fragment for the current user.
@@ -40,22 +37,19 @@ module.exports = async (req, res) => {
       res.setHeader("Content-Type", fragment.type);
     }
 
-    // if (req.params.ext == "txt") {
-    //   // Set the Location header
-    //   fragmentData = convertToTxt(fragment.type, fragmentData);
-    // } 
+    if (req.params.ext == "txt") {
+      // Set the Location header
+      fragmentData = convertToTxt(fragment.type, fragmentData);
+    } 
     if (req.params.ext == "html") {
       fragmentData = convertToHtml(fragment.type, fragmentData);
     } 
-    // if (req.params.ext == "md") {
-    //   fragmentData = convertToMarkdown(fragment.type, fragmentData);
-    // } 
-    // if (req.params.ext == "csv") {
-    //   fragmentData = convertToCSV(fragment.type, fragmentData);
-    // } 
-    // if (req.params.ext == "json") {
-    //   fragmentData = convertToJSON(fragment.type, fragmentData);
-    // } 
+    if (req.params.ext == "json") {
+      fragmentData = convertToJSON(fragment.type, fragmentData);
+    } 
+    if (req.params.ext == "yaml" || req.params.ext == "yml") {
+      fragmentData = convertToYAML(fragment.type, fragmentData);
+    } 
 
     res.status(200).send(fragmentData);
   } catch (err) {
