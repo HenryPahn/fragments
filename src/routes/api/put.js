@@ -3,7 +3,6 @@ const logger = require('../../logger')
 const { Fragment } = require('../../model/fragment')
 
 const contentType = require('content-type');
-const { listFragments } = require('../../model/data/aws');
 
 module.exports = async (req, res) => {
   try {
