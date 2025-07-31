@@ -40,7 +40,7 @@
     "@aws-sdk/client-s3": "^3.772.0",
     "@aws-sdk/lib-dynamodb": "^3.777.0",
     "aws-jwt-verify": "^5.0.0",
-    "compression": "^1.8.0",
+    "compression": "^1.8.1",
     "convert-csv-to-json": "^2.50.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
