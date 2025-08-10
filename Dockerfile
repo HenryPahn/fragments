@@ -1,7 +1,7 @@
 # Dockerfile
 
 # Stage 1 - base: Set up env variables 
-FROM node:22.12.0-alpine AS build
+FROM node:22.18.0-alpine AS build
 
 LABEL maintainer="Henry Pahn <pphan-thanh-hoang@myseneca.ca>"
 LABEL description="Fragments node.js microservice"
